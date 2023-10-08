@@ -12,12 +12,13 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
+                sh 'npm install pm2 -g'
             }
         }
         
         stage('Start application') {
             steps {
-                sh 'npm run start'
+                sh 'pm2 start index.js'
             }
         }
 
