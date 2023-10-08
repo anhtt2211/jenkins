@@ -2,27 +2,24 @@ pipeline {
     agent any
     tools {nodejs "Node"}
     
-    stage('Clone Repository'){
-        steps{
-            git branch: 'master',
-                url: 'https://github.com/anhtt2211/jenkins.git'
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: 'master']], userRemoteConfigs: [[url: 'https://github.com/anhtt2211/jenkins.git']]])
+            }
         }
-    }
-    
-    stage('Install Dependencies'){
-        steps {
-            bat 'npm install'
+        
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
         }
-    }
-        stage('Install pm2'){
-        steps {
-            bat 'npm install pm2 -g'
+        
+        stage('Start application') {
+            steps {
+                sh 'npm run start'
+            }
         }
-    }
-    
-    stage('Deploy'){
-        steps {
-            bat 'pm2 start index.js'
-        }
+
     }
 }
